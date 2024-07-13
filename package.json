@@ -1,0 +1,27 @@
+{
+  "name": "nazel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "npx tailwindcss -i ./src/styles.css -o ./dist/output.css && electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.4.19",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "electron": "^31.1.0",
+    "electron-dl": "^4.0.0",
+    "electron-store": "^10.0.0",
+    "extract-zip": "^2.0.1",
+    "firebase": "^10.12.2",
+    "fs-extra": "^11.2.0",
+    "gsap": "^3.12.5",
+    "minecraft-launcher-core": "^3.18.1",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4"
+  }
+}
