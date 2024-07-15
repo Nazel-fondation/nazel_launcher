@@ -7,10 +7,10 @@ const { signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('
 const { doc, setDoc, collection, query, where, getDocs, getDoc } = require("firebase/firestore"); 
 const { auth, db } = require('./assets/config/firebase.js');
 const fs = require('fs');
-const { createHomeWindow } = require('./home/homeWindow.js');
+const { createHomeWindow, closeHomeWindow } = require('./home/homeWindow.js');
 const workingDirectory = require('./utils/workingDirectory.js')
 const memory = require("./utils/memory.js")
-
+const userData = require("./utils/userData.js")
 
 
 async function loadScreen() {
@@ -143,13 +143,10 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
         }
     }
 
-    const userUID = store.get("user_uid");
-    const docRef = doc(db, "users", userUID);
-    const docSnap = await getDoc(docRef);
-    const pseudo = docSnap.data().pseudo;
+    const userData_ = await userData.getUserData();
     const launcher = new Client();
     let opts = {
-        authorization: Authenticator.getAuth(pseudo),
+        authorization: Authenticator.getAuth(userData_.pseudo),
         root: await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt",
         quickPlay: {
             type: "multiplayer",
@@ -250,3 +247,18 @@ ipcMain.handle("updateWorkingDirectory", async () => {
       }
 })
 
+ipcMain.handle("getUserData", async () => {
+    return await userData.getUserData();
+})
+
+ipcMain.on("logOut", async () => {
+    const Store = await import('electron-store');
+    const store = new Store.default();
+    store.clear("user_uid");
+    createLoginWindow();
+    closeHomeWindow();
+})
+
+ipcMain.on("updateAccount", async (event, valuePseudo, valueSkin) => {
+    userData.updateUserData(valuePseudo, valueSkin);
+})

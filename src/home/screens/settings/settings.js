@@ -19,7 +19,7 @@ const settingsScreen = `
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
         <div class="flex items-center gap-4 px-4 min-h-14 justify-between">
             <div class="flex flex-col justify-center">
                 <p class="text-white text-base font-medium leading-normal line-clamp-1">Répertoire de travail</p>
@@ -59,50 +59,6 @@ const settingsScreen = `
     </div>
 </div>
                 `
-
-let isOpen = false;
-
-document.getElementById('settingsButton').addEventListener('click', () => {
-    if (!isOpen){
-        isOpen = true;
-        document.getElementById('play').style.transform = ''; //Patch play button bug who stay visible when settingsButton due to gsap
-        document.getElementById('loadingContener').style.transform = ''; //Patch loadingContener bug who stay visible when settingsButton due to gsap
-        document.getElementById('overContent').innerHTML = settingsScreen;
-        enableSettingsListener();
-        getSettingsValues();
-        gsap.fromTo("#settingsScreen", { opacity: 0 }, { duration: 0.5, opacity: 1 });
-    }else{
-        isOpen = false
-        gsap.fromTo("#settingsScreen", { opacity: 1 }, { duration: 0.5, opacity: 0 });
-        setTimeout(() => {document.getElementById("settingsScreen").remove()}, 500)}
-});
-
-
-//Know if clicked element can close the setting screen
-let buttons = document.getElementsByTagName('button');
-for (let button of buttons) {
-    button.addEventListener("click", (function(currentButton) {
-        return function() {
-            if (currentButton.id !== "settingsButton") {
-                if (isOpen){
-                    isOpen = false
-                    document.getElementById("settingsScreen").remove();
-                }
-            }
-        };
-    })(button));
-}
-
-//Know if clicked element can close the setting screen
-const container = document.getElementById('server-list');
-container.addEventListener("click", (event) => {
-    if (event.target && (event.target.nodeName === "LI" || event.target.nodeName === "IMG")) {
-        if (isOpen){
-            isOpen = false
-            document.getElementById("settingsScreen").remove();
-        }
-    }
-});
 
 function getSettingsValues(){
     ipcRenderer.invoke('getcloseAfterStartedValue').then((result) => {
