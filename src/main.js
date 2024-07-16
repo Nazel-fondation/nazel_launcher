@@ -11,11 +11,16 @@ const { createHomeWindow, closeHomeWindow } = require('./home/homeWindow.js');
 const workingDirectory = require('./utils/workingDirectory.js')
 const memory = require("./utils/memory.js")
 const userData = require("./utils/userData.js")
-
+const head = require("./utils/playerHead.js")
+const canRun = require("./utils/canRun.js")
 
 async function loadScreen() {
     const Store = await import('electron-store');
     const store = new Store.default();
+
+    if (!await canRun.canRun()){ 
+        app.quit();
+     }
 
     if(store.get("launcher_version") !== "1.0.0"){
         console.log("MISE A JOUR");
@@ -80,12 +85,17 @@ ipcMain.handle('loginRequest', async (event, email, password) => {
 
 ipcMain.handle('registerRequest', async (event, pseudo, email, password) => {
     try {
+        pseudo = pseudo.replace(/[^a-zA-Z0-9_&-]/g, '');
+        if (pseudo.length <= 4 || pseudo.length >= 20)
+            return "auth/pseudoSize"
+        
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("pseudo", "==", pseudo));
         const querySnapshot = await getDocs(q);
         if(!querySnapshot.empty){
             return "auth/pseudoUsed"
         }
+        
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         const Store = await import('electron-store');
@@ -93,7 +103,8 @@ ipcMain.handle('registerRequest', async (event, pseudo, email, password) => {
         store.set("user_uid", user.uid);
         await setDoc(doc(db, "users", user.uid), {
             pseudo: pseudo
-          });
+        });
+
         closeSignInWindow();
         createHomeWindow();
     } catch (error) {
@@ -259,6 +270,12 @@ ipcMain.on("logOut", async () => {
     closeHomeWindow();
 })
 
-ipcMain.on("updateAccount", async (event, valuePseudo, valueSkin) => {
-    userData.updateUserData(valuePseudo, valueSkin);
+ipcMain.handle("updateAccount", async (event, valuePseudo, valueSkin) => {
+    return userData.updateUserData(valuePseudo, valueSkin);
+})
+
+ipcMain.handle("getPlayerHead", async () => {
+    const data = await userData.getUserData();
+    const result = await head.getPlayerHead(data.skin, data.pseudo);
+    return result.toString("base64");
 })

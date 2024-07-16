@@ -9,8 +9,10 @@ const accountScreen = `
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal line-clamp-2">
                     Cela permet de changer de pseudo
             </div>                            
-            <div class="shrink-0">
+            <div id="pseudoContainer">
+                <div class="invisible h-6"></div>    
                 <input id="pseudoInput" type="text" class="shadow border-rose-500 appearance-none py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline rounded-md bg-squareBackground w-56 h-7"></input>
+                <p id="errorPseudo" class="text-red-500 text-sm mt-1 font-medium invisible"></p>    
             </div>
         </div>
         <div class="flex items-center gap-4 px-4 min-h-14 justify-between py-2">
@@ -19,8 +21,10 @@ const accountScreen = `
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal line-clamp-2">
                 Entrer l'url uniquement en png du skin que vous souhaiter avoir (il est possible que le skin ne soit pas visible sur tous les serveurs)
             </div>                            
-            <div class="shrink-0">
+            <div>
+                <div class="invisible h-6"></div>    
                 <input id="skinInput" type="text" class="shadow border-rose-500 appearance-none py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline rounded-md bg-squareBackground w-56 h-7"></input>
+                <p id="errorSkin" class="text-red-500 text-sm mt-1 font-medium invisible"></p>    
             </div>
         </div>
         <div class="flex items-center gap-4 px-4 min-h-14 justify-between py-2">
@@ -43,7 +47,8 @@ function getAccountValues() {
     ipcRenderer.invoke('getUserData').then((result) => {
         userData = result;
         document.getElementById("pseudoInput").value = result.pseudo;
-        document.getElementById("skinInput").value = result.skin;
+        if (result.skin !== "undefined")
+            document.getElementById("skinInput").value = result.skin;
     })
 }
 
@@ -51,18 +56,51 @@ function enableAccountListeners(){
     const pseudoInput = document.getElementById("pseudoInput")
     const skinInput = document.getElementById("skinInput")
     const logOutButton = document.getElementById("logOutButton")
+    const errorPseudo = document.getElementById("errorPseudo")
 
     skinInput.addEventListener("blur", () => {
-        pseudoInput.value = pseudoInput.value.replace(/[^a-zA-Z0-9_&-]/g, '');
+        pseudoInput.classList.remove("border", "border-red-500")
         if (userData.skin !== skinInput.value){
-            ipcRenderer.send("updateAccount", pseudoInput.value, skinInput.value)
+            ipcRenderer.invoke("updateAccount", pseudoInput.value, skinInput.value).then((result) => {
+                console.log(result)
+                if (result === "auth/pseudoUsed"){
+                    pseudoInput.classList.add("border border-red-500")
+                }else{
+                    ipcRenderer.invoke('getPlayerHead').then((result) => {
+                        document.getElementById("playerHeadImage").src = `data:image/png;base64,${result}`; 
+                    })
+                }
+            })
         }
     })
 
     pseudoInput.addEventListener("blur", () => {
         pseudoInput.value = pseudoInput.value.replace(/[^a-zA-Z0-9_&-]/g, '');
+        pseudoInput.classList.remove("border", "border-red-500")
+        errorPseudo.classList.add("invisible")
         if (userData.pseudo  !== pseudoInput.value){
-            ipcRenderer.send("updateAccount", pseudoInput.value, skinInput.value)
+            ipcRenderer.invoke("updateAccount", pseudoInput.value, skinInput.value).then((result) => {
+                switch (result) {
+                    case "auth/pseudoUsed":
+                        pseudoInput.classList.add("border", "border-red-500");
+                        errorPseudo.textContent = "Pseudo déjà utilisé"
+                        errorPseudo.classList.remove("invisible")
+                        break;
+                    
+                    case "auth/pseudoSize":
+                        pseudoInput.classList.add("border", "border-red-500");
+                        errorPseudo.textContent = "Pseudo trop court ou trop long"
+                        errorPseudo.classList.remove("invisible")
+                        break;
+                
+                    default:
+                        ipcRenderer.send("updateAccount", pseudoInput.value, skinInput.value);
+                        ipcRenderer.invoke('getPlayerHead').then((result) => { //Try to change accountHead if skin url is good the head stay the same
+                            document.getElementById("playerHeadImage").src = `data:image/png;base64,${result}`; 
+                        })
+                        break;
+                }
+            })
         }
     })
 
@@ -78,7 +116,7 @@ function enableAccountListeners(){
     });
 
     pseudoInput.addEventListener('input', function() {
-      pseudoInput.value = input.value.replace(/[^a-zA-Z0-9_&-]/g, '');
+      pseudoInput.value = pseudoInput.value.replace(/[^a-zA-Z0-9_&-]/g, '');
     });
 
     logOutButton.addEventListener("click", () => {

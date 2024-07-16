@@ -20,7 +20,10 @@
     "firebase": "^10.12.2",
     "fs-extra": "^11.2.0",
     "gsap": "^3.12.5",
+    "jimp": "^0.22.12",
     "minecraft-launcher-core": "^3.18.1",
+    "node-fetch": "^3.3.2",
+    "node-notifier": "^10.0.1",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4"
   }

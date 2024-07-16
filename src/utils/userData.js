@@ -1,4 +1,4 @@
-const { doc, setDoc, getDoc } = require("firebase/firestore"); 
+const { doc, setDoc, getDoc, query, where, getDocs, collection } = require("firebase/firestore"); 
 const { db } = require('../assets/config/firebase.js');
 
 let userData
@@ -26,12 +26,23 @@ async function getUserData(){
 async function updateUserData(valuePseudo, valueSkin){
     const Store = await import('electron-store');
     const store = new Store.default();
+    
+    valuePseudo = valuePseudo.replace(/[^a-zA-Z0-9_&-]/g, '');
+    if (valuePseudo.length <= 4 || valuePseudo.length >= 20)
+        return "auth/pseudoSize"
+
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("pseudo", "==", valuePseudo));
+    const querySnapshot = await getDocs(q);
+    if(!querySnapshot.empty)
+        return "auth/pseudoUsed"
+
     user_uid = store.get("user_uid");
     const userRef = doc(db, "users", user_uid);
-    valuePseudo = valuePseudo.replace(/[^a-zA-Z0-9_&-]/g, '');
     userData.pseudo = valuePseudo;
     userData.skin = valueSkin;
     setDoc(userRef, { pseudo: valuePseudo, skin: valueSkin});
+    return "ok"
 }
 
 module.exports = {getUserData, updateUserData}

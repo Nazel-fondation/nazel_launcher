@@ -106,6 +106,12 @@ ipcRenderer.on('minecraftClose', (event, reasonNumber) => {
     playButton.id = "play"
 })
 
+ipcRenderer.invoke('getPlayerHead').then((result) => {
+    document.getElementById("playerHeadImage").src = `data:image/png;base64,${result}`; 
+})
+
+
+
 getServerList();
 updateServerData();
 setInterval(updateServerData, 5 * 60 * 1000)

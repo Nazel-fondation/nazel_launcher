@@ -8,6 +8,18 @@ document.getElementById('open-login').addEventListener('click', () => {
   ipcRenderer.send('login');
 });
 
+
+document.getElementById('pseudo').addEventListener("keydown", (event) => {
+  const allowedCharacters = /^[a-zA-Z0-9_&-]*$/;
+  const controlKeys = ['Backspace', 'Tab', 'Enter', 'Shift', 'Control', 'Alt', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Delete'];
+  if (controlKeys.includes(event.key)) {
+      return;
+  }
+  if (!allowedCharacters.test(event.key)) {
+      event.preventDefault();
+  }
+})
+
 document.getElementById('register-button').addEventListener('click', () => {
   const pseudo = document.getElementById('pseudo').value;
   const email = document.getElementById('email').value;
@@ -68,8 +80,20 @@ document.getElementById('register-button').addEventListener('click', () => {
           pseudoErrorLabel.textContent = "Pseudo déjà utilisé";
           pseudoInput.classList.add("border-2");
           break;
+        
+        case "auth/pseudoSize":
+          pseudoErrorLabel.textContent = "Pseudo trop court ou trop long";
+          pseudoInput.classList.add("border-2");
+          break;
+
+        case "auth/email-already-in-use":
+          emailErrorLabel.textContent = "Email déjà utilisé";
+          emailInput.classList.add("border-2");
+          break;
 
         default:
+          pseudoErrorLabel.textContent = "Une erreur inconnue s'est produite";
+          pseudoInput.classList.add("border-2");
           break;
       }
     })
