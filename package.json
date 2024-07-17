@@ -1,10 +1,26 @@
 {
   "name": "nazel",
   "version": "1.0.0",
-  "description": "",
+  "description": "Personal launcher for private servers",
   "main": "src/main.js",
   "scripts": {
-    "start": "npx tailwindcss -i ./src/styles.css -o ./dist/output.css && electron ."
+    "start": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron .",
+    "build": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder",
+    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder --publish always"
+  },
+  "build": {
+    "appId": "app.web.nazel-launcher",
+    "productName": "Nazel",
+    "directories": {
+      "buildResources": "build"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "thibault0712",
+        "repo": "nazel_launcher"
+      }
+    ]
   },
   "keywords": [],
   "author": "",
@@ -12,19 +28,24 @@
   "dependencies": {
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
-    "dotenv": "^16.4.5",
-    "electron": "^31.1.0",
+    "dotenv-expand": "^11.0.6",
     "electron-dl": "^4.0.0",
     "electron-store": "^10.0.0",
+    "electron-updater": "^6.2.1",
     "extract-zip": "^2.0.1",
     "firebase": "^10.12.2",
     "fs-extra": "^11.2.0",
     "gsap": "^3.12.5",
     "jimp": "^0.22.12",
     "minecraft-launcher-core": "^3.18.1",
+    "node-env-run": "^4.0.2",
     "node-fetch": "^3.3.2",
     "node-notifier": "^10.0.1",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4"
+  },
+  "devDependencies": {
+    "electron": "^31.1.0",
+    "electron-builder": "^24.13.3"
   }
 }

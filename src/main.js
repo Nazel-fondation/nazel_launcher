@@ -8,6 +8,7 @@ const { doc, setDoc, collection, query, where, getDocs, getDoc } = require("fire
 const { auth, db } = require('./assets/config/firebase.js');
 const fs = require('fs');
 const { createHomeWindow, closeHomeWindow } = require('./home/homeWindow.js');
+const { autoUpdater } = require('electron-updater');
 const workingDirectory = require('./utils/workingDirectory.js')
 const memory = require("./utils/memory.js")
 const userData = require("./utils/userData.js")
@@ -22,9 +23,7 @@ async function loadScreen() {
         app.quit();
      }
 
-    if(store.get("launcher_version") !== "1.0.0"){
-        console.log("MISE A JOUR");
-    }
+    autoUpdater.checkForUpdatesAndNotify();
 
     if(store.has("user_uid")){
         createHomeWindow();
@@ -33,6 +32,26 @@ async function loadScreen() {
     }
 
 }
+
+autoUpdater.on('update-available', () => {
+    log.info('Update available.');
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update available',
+      message: 'A new version of the application is available. It will be downloaded in the background.',
+    });
+  });
+  
+  autoUpdater.on('update-downloaded', () => {
+    log.info('Update downloaded.');
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update ready',
+      message: 'A new version of the application has been downloaded. The application will now restart to apply the update.',
+    }, () => {
+      setImmediate(() => autoUpdater.quitAndInstall());
+    });
+  });
 
 app.on('ready', loadScreen);
 
