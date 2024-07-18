@@ -9,6 +9,46 @@
     "make": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-forge make",
     "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder -p always"
   },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "nazel"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "thibault0712",
+              "name": "nazel_launcher"
+            },
+            "prerelease": false,
+            "draft": true
+          }
+        }
+      ]
+    }
+  },
   "build": {
     "appId": "app.web.nazel-launcher",
     "productName": "Nazel",
@@ -39,6 +79,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
@@ -58,9 +102,11 @@
     "node-fetch": "^3.3.2",
     "node-notifier": "^10.0.1",
     "postcss": "^8.4.38",
+    "rpmbuild": "^0.0.23",
     "tailwindcss": "^3.4.4"
   },
   "devDependencies": {
+    "@electron-forge/maker-rpm": "^7.4.0",
     "@electron-forge/publisher-github": "^7.4.0",
     "electron": "^31.1.0",
     "electron-builder": "^24.13.3"
