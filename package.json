@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npx tailwindcss -i ./src/assets/css/styles.css -o ./src/assets/css/tailwind.css && electron .",
     "build": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder",
+    "make": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-forge make",
     "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder -p always"
   },
   "build": {
