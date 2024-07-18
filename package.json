@@ -4,9 +4,9 @@
   "description": "Personal launcher for private servers",
   "main": "src/main.js",
   "scripts": {
-    "start": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron .",
+    "start": "npx tailwindcss -i ./src/assets/css/styles.css -o ./src/assets/css/tailwind.css && electron .",
     "build": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder",
-    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder --publish always"
+    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder -p always"
   },
   "build": {
     "appId": "app.web.nazel-launcher",
@@ -20,7 +20,11 @@
         "owner": "thibault0712",
         "repo": "nazel_launcher"
       }
-    ]
+    ],
+    "linux": {
+      "target": "AppImage",
+      "artifactName": "Nazel.AppImage"
+    }
   },
   "keywords": [],
   "author": "",
@@ -28,8 +32,11 @@
   "dependencies": {
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
     "electron-dl": "^4.0.0",
+    "electron-is-dev": "^3.0.1",
+    "electron-log": "^5.1.6",
     "electron-store": "^10.0.0",
     "electron-updater": "^6.2.1",
     "extract-zip": "^2.0.1",

@@ -1,7 +1,8 @@
 const { createSignInWindow, closeSignInWindow } = require('./sign_in/signInWindow');
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, ipcRenderer } = require('electron');
 const path = require('path');
 const { Client, Authenticator } = require('minecraft-launcher-core');
+const { createLoaderWindow, closeLoaderWindow } = require('./loader/loaderWindow');
 const { createLoginWindow, closeLoginWindow } = require('./login/loginWindow');
 const { signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 const { doc, setDoc, collection, query, where, getDocs, getDoc } = require("firebase/firestore"); 
@@ -9,51 +10,18 @@ const { auth, db } = require('./assets/config/firebase.js');
 const fs = require('fs');
 const { createHomeWindow, closeHomeWindow } = require('./home/homeWindow.js');
 const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
 const workingDirectory = require('./utils/workingDirectory.js')
 const memory = require("./utils/memory.js")
 const userData = require("./utils/userData.js")
 const head = require("./utils/playerHead.js")
-const canRun = require("./utils/canRun.js")
+const canRun = require("./utils/canRun.js");
 
-async function loadScreen() {
-    const Store = await import('electron-store');
-    const store = new Store.default();
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
 
-    if (!await canRun.canRun()){ 
-        app.quit();
-     }
-
-    autoUpdater.checkForUpdatesAndNotify();
-
-    if(store.has("user_uid")){
-        createHomeWindow();
-    }else{
-        createLoginWindow();
-    }
-
-}
-
-autoUpdater.on('update-available', () => {
-    log.info('Update available.');
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'Update available',
-      message: 'A new version of the application is available. It will be downloaded in the background.',
-    });
-  });
-  
-  autoUpdater.on('update-downloaded', () => {
-    log.info('Update downloaded.');
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'Update ready',
-      message: 'A new version of the application has been downloaded. The application will now restart to apply the update.',
-    }, () => {
-      setImmediate(() => autoUpdater.quitAndInstall());
-    });
-  });
-
-app.on('ready', loadScreen);
+app.on('ready', createLoaderWindow);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -66,6 +34,57 @@ app.on('activate', () => {
         createHomeWindow();
     }
 });
+
+ipcMain.handle("systemRequirement", async () => {
+    if (!await canRun.canRun()){ 
+        return "problem"
+    }else{
+        return "ok"
+    }
+})
+
+ipcMain.on("updateVerification", async (event) => {
+    const isDev = await import('electron-is-dev');
+    if(isDev.default){
+        event.sender.send("skipUpdate")
+    }else{
+        autoUpdater.checkForUpdatesAndNotify();
+    }
+
+    autoUpdater.on('update-available', () => {
+        event.sender.send('updateAvailable');
+    })
+    autoUpdater.on('update-not-available', () => {
+        log.info("mise à jour non disponible")
+        event.sender.send('updateNotAvailable');
+    })
+    autoUpdater.on('error', (err) => {
+        log.info('Error in auto-updater. ' + err);
+    })
+    autoUpdater.on('download-progress', (progressObj) => {
+        const percentage = (progressObj.percent).toFixed(2)
+        event.sender.send("updatePercentageValue", percentage)
+    })
+    autoUpdater.on('update-downloaded', () => {
+        event.sender.send("updateDone");
+        log.info('Update downloaded');
+
+        setImmediate(() => {
+            autoUpdater.quitAndInstall();
+        });
+    });
+})
+
+ipcMain.on("loadLauncher", async () => {
+    const Store = await import('electron-store');
+    const store = new Store.default();
+    closeLoaderWindow();
+    if(store.has("user_uid")){
+        createHomeWindow();
+    }else{
+        createLoginWindow();
+    }
+})
 
 ipcMain.on('close-window', (event, arg) => {
     if (arg === "loginWindow"){

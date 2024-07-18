@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Se connecter</title>
+    <link rel="stylesheet" href="../assets/css/tailwind.css">
+</head>
+<body class="flex items-center justify-center">
+    <div class="bg-background p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div class="text-center mb-5">
+            <img src="../assets/img/logo.png" alt="Logo" class="mx-auto w-44 h-auto rounded-md">
+        </div>
+        <div class="px-12 mt-12">
+            <p id="loadingAction" class="text-white font-medium text-xl text-center"></p>
+            <div class="flex w-full h-2 bg-squareBackground rounded-full overflow-hidden mt-4" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                <div id="loadingBar" class="flex flex-col justify-center rounded-full overflow-hidden bg-white text-xs text-white text-center whitespace-nowrap transition duration-500" style="width: 0%"></div>
+            </div>
+            <p id="loadingPercentage" class="text-white text-xl font-medium text-center mt-2 invisible"></p>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html>
