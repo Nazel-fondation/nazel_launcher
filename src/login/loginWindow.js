@@ -5,7 +5,7 @@ let loginWindow;
 function createLoginWindow() {
     loginWindow = new BrowserWindow({
         width: 450,
-        height: 600,
+        height: 520,
         autoHideMenuBar: true,
         frame: false,
         transparent: true,

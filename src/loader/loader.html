@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Se connecter</title>
     <link rel="stylesheet" href="../assets/css/tailwind.css">
+    <script>
+        // Desable interaction with pictures
+        document.addEventListener('dragstart', function (e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        }, false);
+    </script>
 </head>
-<body class="flex items-center justify-center">
+<body class="flex items-center justify-center select-none">
     <div class="bg-background p-8 rounded-lg shadow-lg w-full max-w-md">
         <div class="text-center mb-5">
             <img src="../assets/img/logo.png" alt="Logo" class="mx-auto w-44 h-auto rounded-md">

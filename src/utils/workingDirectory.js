@@ -1,3 +1,4 @@
+const log = require('electron-log')
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -33,13 +34,10 @@ async function moveWorkingDirectory(target) {
     const source = await getWorkingDirectory();
     let files = [];
     try {
-        // Assure-toi que le dossier cible existe, sinon le crée
         await fs.ensureDir(target);
 
-        // Lit le contenu du dossier source
         const items = await fs.readdir(source);
 
-        // Déplace chaque élément du dossier source vers le dossier cible
         for (const item of items) {
             const sourcePath = path.join(source, item);
             const targetPath = path.join(target, item);
@@ -51,5 +49,23 @@ async function moveWorkingDirectory(target) {
     }
 }
 
+async function rmDir(path) {
+    const exists = await fs.pathExists(path);
+    if (!exists) {
+        log.info(`Le dossier à supprimer n'existe pas : ${path}`);
+        return;
+    }
 
-module.exports = {getWorkingDirectory, moveWorkingDirectory};
+    await fs.remove(path);
+}
+
+// Fonction to remove files can create confict with other files like mods folder if I update a mod
+async function cleanWorkingDirectoryForServerUpdate(serverId){
+    const directory = await getWorkingDirectory() + "/" + serverId + "/defaullt/"
+    rmDir(directory + "forge");
+    rmDir(directory + "logs"); //Not obligatory but I prefere if there is a problem the user send a log smaller with the problem
+    rmDir(directory + "mods");
+}
+
+
+module.exports = {getWorkingDirectory, moveWorkingDirectory, cleanWorkingDirectoryForServerUpdate};

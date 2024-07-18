@@ -13,44 +13,52 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        // Desable interaction with pictures
+        document.addEventListener('dragstart', function (e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        }, false);
+    </script>
 </head>
-<body class="flex items-center justify-center">
-    <div class="relative bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+<body class="flex items-center justify-center select-none">
+    <div class="relative bg-background p-8 rounded-lg shadow-lg w-full max-w-md">
         <button id="close-buton" class="close-button text-white">&times;</button>
             <div class="text-center mb-8">
-            <img src="../assets/img/login_background.png" alt="Logo" class="mx-auto mb-4 w-full rounded-md opacity-80">
+            <img src="../assets/img/login_background.png" alt="Logo" class="mx-auto mb-4 w-full rounded-md opacity-70">
         </div>
         <form>
             <div class="mb-4">
                 <label class="block text-gray-300 text-sm font-bold mb-2" for="pseudo">
                     Pseudo
                 </label>
-                <input class="shadow appearance-none border-red-500 rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700" id="pseudo" type="text" placeholder="Saisissez votre psueod">
+                <input class="shadow appearance-none border-red-500 rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-squareBackground" id="pseudo" type="text" placeholder="Saisissez votre psueod">
                 <a id="pseudoErrorLabel" class="text-rose-500 text-sm font-medium" ></a>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-300 text-sm font-bold mb-2" for="email">
                     Adresse E-mail
                 </label>
-                <input class="shadow appearance-none border-red-500 rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700" id="email" type="email" placeholder="Saisissez votre adresse e-mail">
+                <input class="shadow appearance-none border-red-500 rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-squareBackground" id="email" type="email" placeholder="Saisissez votre adresse e-mail">
                 <a id="emailErrorLabel" class="text-rose-500 text-sm font-medium" ></a>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-300 text-sm font-bold mb-2" for="password">
                     Mot de passe
                 </label>
-                <input class="shadow appearance-none border-red-500 rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700" id="password" type="password" placeholder="Saisissez votre mot de passe">
+                <input class="shadow appearance-none border-red-500 rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-squareBackground" id="password" type="password" placeholder="Saisissez votre mot de passe">
                 <a id="passwordErrorLabel" class="text-rose-500 text-sm font-medium" ></a>
             </div>
             <div class="mb-6">
                 <label class="block text-gray-300 text-sm font-bold mb-2" for="repassword">
                     Confirmer le mot de passe
                 </label>
-                <input class="shadow appearance-none border-red-500 rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-gray-700" id="repassword" type="password" placeholder="Entrez à nouveau votre mot de passe">
+                <input class="shadow appearance-none border-red-500 rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline bg-squareBackground" id="repassword" type="password" placeholder="Entrez à nouveau votre mot de passe">
                 <a id="repasswordErrorLabel" class="text-rose-500 text-sm font-medium" ></a>
             </div>
             <div class="mb-6">
-                <button id="register-button" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                <button id="register-button" class="w-full bg-squareBackground hover:bg-selectedSquareBackground text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                     S'inscrire
                 </button>
             </div>
@@ -60,6 +68,6 @@
         </form>
     </div>
     <script src="renderer.js"></script>
-
+    <script src="animations.js"></script>
 </body>
 </html>

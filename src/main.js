@@ -163,6 +163,7 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
     const store = new Store.default();
 
     if (!store.has("VERSION_" + serverData.id) || store.get("VERSION_" + serverData.id) !== serverData.clientVersion){
+        workingDirectory.cleanWorkingDirectoryForServerUpdate(serverData.id)
         const { download } = await import('electron-dl');
         const win = BrowserWindow.getFocusedWindow();
         try {

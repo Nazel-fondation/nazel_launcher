@@ -6,8 +6,16 @@
     <title>Electron Minecraft Launcher</title>
     <link rel="stylesheet" href="../assets/css/tailwind.css">
     <script src="https://kit.fontawesome.com/0ea9979450.js" crossorigin="anonymous"></script>
+    <script>
+        // Desable interaction with pictures
+        document.addEventListener('dragstart', function (e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        }, false);
+    </script>
 </head>
-<body>
+<body class="select-none">
     <div class="flex bg-background h-screen max-w-screen overflow-hidden">
         <div id="anim1" class="max-h-full h-full flex flex-col items-center bg-background w-24">
             <div class="border-b border-gray-400">

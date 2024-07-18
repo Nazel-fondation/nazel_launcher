@@ -24,6 +24,14 @@
     "linux": {
       "target": "AppImage",
       "artifactName": "Nazel.AppImage"
+    },
+    "win": {
+      "target": "nsis",
+      "artifactName": "Nazel.exe"
+    },
+    "mac": {
+      "target": "dmg",
+      "artifactName": "Nazel.dmg"
     }
   },
   "keywords": [],
