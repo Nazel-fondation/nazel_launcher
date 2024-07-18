@@ -5,7 +5,7 @@ let loaderWindow;
 function createLoaderWindow() {
     loaderWindow = new BrowserWindow({
         width: 450,
-        height: 600,
+        height: 400,
         autoHideMenuBar: true,
         frame: false,
         transparent: true,
