@@ -23,7 +23,7 @@
     ],
     "linux": {
       "target": "deb",
-      "artifactName": "Nazel.deb",
+      "artifactName": "Nazel.${ext}",
       "maintainer": "thibault0712 thibaultfalezan@gmail.com"
     },
     "win": {
@@ -35,14 +35,14 @@
           ]
         }
       ],
-      "artifactName": "Nazel-Setup.exe"
+      "artifactName": "Nazel.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     },
     "mac": {
-      "artifactName": "Nazel.dmg",
+      "artifactName": "Nazel.${ext}",
       "target": "dmg",
       "category": "public.app-category.productivity"
     }
