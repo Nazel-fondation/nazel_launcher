@@ -3,6 +3,8 @@ const { BrowserWindow } = require('electron');
 let loaderWindow;
 
 function createLoaderWindow() {
+    const { isDev } = import("electron-is-dev")
+
     loaderWindow = new BrowserWindow({
         width: 450,
         height: 400,
@@ -13,7 +15,8 @@ function createLoaderWindow() {
         webPreferences: {
         //  preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
-            contextIsolation: false
+            contextIsolation: false,
+            devTools: !isDev
         }
     });
     loaderWindow.on('closed', () => {

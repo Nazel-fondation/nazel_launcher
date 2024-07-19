@@ -3,6 +3,7 @@ const { BrowserWindow } = require('electron');
 let signInWindow;
 
 function createSignInWindow() {
+    const { isDev } = import("electron-is-dev")
     signInWindow = new BrowserWindow({
         width: 450,
         height: 750,
@@ -13,7 +14,8 @@ function createSignInWindow() {
         webPreferences: {
         //  preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
-            contextIsolation: false
+            contextIsolation: false,
+            devTools: !isDev
         }
     });
     signInWindow.on('closed', () => {
