@@ -1,4 +1,5 @@
 const { BrowserWindow } = require('electron');
+const { default: isDev } = require('electron-is-dev');
 const path = require('path');
 
 let homeWindow;
@@ -10,6 +11,7 @@ async function createHomeWindow () {
         height: 1000,
         webPreferences: {
             // preload: path.join(__dirname, 'preload.js'),
+            devTools: isDev.default,
             nodeIntegration: true,
             contextIsolation: false
         }
