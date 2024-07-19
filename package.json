@@ -44,7 +44,8 @@
     },
     "mac": {
       "artifactName": "Nazel.${ext}",
-      "target": "mas"
+      "target": "dmg",
+      "category": "public.app-category.productivity"
     }
   },
   "keywords": [],
