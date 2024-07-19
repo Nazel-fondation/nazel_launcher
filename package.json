@@ -63,7 +63,7 @@
       }
     ],
     "linux": {
-      "target": [deb],
+      "target": ["deb"],
       "artifactName": "Nazel.AppImage"
     },
     "win": {
