@@ -63,16 +63,19 @@
       }
     ],
     "linux": {
-      "target": "AppImage",
+      "target": [deb],
       "artifactName": "Nazel.AppImage"
     },
     "win": {
-      "target": "nsis",
-      "artifactName": "Nazel.exe"
+      "target": ["nsis"],
+      "nsis": {
+        "oneClick": false,
+        "allowToChangeInstallationDirectory": true
+      }    
     },
     "mac": {
-      "target": "dmg",
-      "artifactName": "Nazel.dmg"
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.productivity"
     }
   },
   "keywords": [],
