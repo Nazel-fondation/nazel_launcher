@@ -1,6 +1,6 @@
 {
   "name": "nazel",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Personal launcher for private servers",
   "main": "src/main.js",
   "scripts": {
