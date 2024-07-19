@@ -12,7 +12,9 @@ jobs:
     - name: install dependencies
       run: npm install
     - name: build
-      run: npm run make
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: npm run build
 
   build_on_mac:
     runs-on: macos-latest
@@ -24,7 +26,9 @@ jobs:
     - name: install dependencies
       run: npm install
     - name: build
-      run: npm run make
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: npm run build
 
   build_on_win:
     runs-on: windows-latest
@@ -36,4 +40,6 @@ jobs:
     - name: install dependencies
       run: npm install
     - name: build
-      run: npm run make
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: npm run build
