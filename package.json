@@ -34,7 +34,8 @@
             "x64"
           ]
         }
-      ]
+      ],
+      "artifactName": "Nazel-Setup.exe"
     },
     "nsis": {
       "oneClick": false,
