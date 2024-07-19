@@ -6,8 +6,7 @@
   "scripts": {
     "start": "npx tailwindcss -i ./src/assets/css/styles.css -o ./src/assets/css/tailwind.css && electron .",
     "build": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder",
-    "make": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-forge make",
-    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-forge publish"
+    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder --publish always"
   },
   "config": {
     "forge": {
@@ -63,23 +62,34 @@
       }
     ],
     "linux": {
-      "target": ["deb"],
-      "artifactName": "Nazel.AppImage"
+      "target": "deb",
+      "artifactName": "Nazel.deb",
+      "maintainer": "thibault0712 thibaultfalezan@gmail.com"
     },
     "win": {
-      "target": ["nsis"],
-      "nsis": {
-        "oneClick": false,
-        "allowToChangeInstallationDirectory": true
-      }    
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "mac": {
-      "target": ["dmg", "zip"],
+      "target": "dmg",
       "category": "public.app-category.productivity"
     }
   },
   "keywords": [],
-  "author": "thibault0712",
+  "author": {
+    "name": "Thibault",
+    "email": "thibaultfalezan@gmail.com"
+  },  
   "license": "ISC",
   "dependencies": {
     "@electron-forge/cli": "^7.4.0",
