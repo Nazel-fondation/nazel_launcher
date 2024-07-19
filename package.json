@@ -8,33 +8,6 @@
     "build": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder",
     "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder --publish always"
   },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "nazel"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
-  },
   "build": {
     "appId": "app.web.nazel-launcher",
     "productName": "Nazel",
@@ -68,6 +41,7 @@
       "allowToChangeInstallationDirectory": true
     },
     "mac": {
+      "artifactName": "Nazel.dmg",
       "target": "dmg",
       "category": "public.app-category.productivity"
     }
