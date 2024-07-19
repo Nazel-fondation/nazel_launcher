@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx tailwindcss -i ./src/assets/css/styles.css -o ./src/assets/css/tailwind.css && electron .",
     "build": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder",
-    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder --publish always -mwl"
+    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder --publish always"
   },
   "build": {
     "appId": "app.web.nazel-launcher",
