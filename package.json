@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx tailwindcss -i ./src/assets/css/styles.css -o ./src/assets/css/tailwind.css && electron .",
     "build": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder",
-    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder --publish always"
+    "publish": "npx tailwindcss -i ./src/assets/css/styles.css -o ./dist/assets/css/tailwind.css && electron-builder --publish always -mwl"
   },
   "build": {
     "appId": "app.web.nazel-launcher",
@@ -24,7 +24,8 @@
     "linux": {
       "target": "deb",
       "artifactName": "Nazel.${ext}",
-      "maintainer": "thibault0712 thibaultfalezan@gmail.com"
+      "maintainer": "thibault0712 thibaultfalezan@gmail.com",
+      "category": "Utility" 
     },
     "win": {
       "target": [
@@ -43,8 +44,7 @@
     },
     "mac": {
       "artifactName": "Nazel.${ext}",
-      "target": "dmg",
-      "category": "public.app-category.productivity"
+      "target": "mas"
     }
   },
   "keywords": [],
