@@ -1,0 +1,4 @@
+src/assets/config/firebase.js
+dist/
+node_modules/
+out/
