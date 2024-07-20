@@ -12,7 +12,7 @@ jobs:
       with:
         node-version: 20
     - name: Create config.json
-      run: echo "${{ secrets.CONFIG_JSON }}" > src/assets/config/config.json
+      run: printf '%s' "${{ secrets.CONFIG_JSON }}" > src/assets/config/config.json
     - name: install dependencies
       run: npm install
     - name: publish
@@ -28,7 +28,7 @@ jobs:
       with:
         node-version: 20
     - name: Create config.json
-      run: echo "${{ secrets.CONFIG_JSON }}" > src/assets/config/config.json
+      run: printf '%s' "${{ secrets.CONFIG_JSON }}" > src/assets/config/config.json
     - name: install dependencies
       run: npm install
     - name: publish
@@ -44,7 +44,7 @@ jobs:
       with:
         node-version: 20
     - name: Create config.json
-      run: echo "${{ secrets.CONFIG_JSON }}" > src/assets/config/config.json
+      run: printf '%s' "${{ secrets.CONFIG_JSON }}" > src/assets/config/config.json
     - name: install dependencies
       run: npm install
     - name: publish
