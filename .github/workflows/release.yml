@@ -12,9 +12,11 @@ jobs:
       with:
         node-version: 20
     - name: Create config.json
-      run: printf '%s' "${{ secrets.CONFIG_JSON }}" > src/assets/config/config.json
-    - name: Debug config.json
-      run: cat src/assets/config/config.json
+      uses: jsdaniell/create-json@v1.2.3
+      with:
+        name: "config.json"
+        json: ${{ secrets.CONFIG_JSON }}
+        dir: "src/assets/config"
     - name: install dependencies
       run: npm install
     - name: publish
