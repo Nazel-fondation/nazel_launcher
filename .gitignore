@@ -1,4 +1,4 @@
-src/assets/config/firebase.js
+src/assets/config/config.json
 dist/
 node_modules/
 out/
