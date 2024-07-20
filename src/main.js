@@ -20,6 +20,12 @@ const canRun = require("./utils/canRun.js");
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
+//temp
+
+let rawdata = fs.readFileSync(path.join(__dirname, 'assets/config/config.json'));
+let config = JSON.parse(rawdata);
+log.info(config)
+//end temp
 
 app.on('ready', createLoaderWindow);
 
