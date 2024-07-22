@@ -3,7 +3,8 @@ const { BrowserWindow } = require('electron');
 let loginWindow;
 
 async function createLoginWindow() {
-    const { isDev } = await import("electron-is-dev")
+    const isDev = await import('electron-is-dev');
+
     loginWindow = new BrowserWindow({
         width: 450,
         height: 520,
