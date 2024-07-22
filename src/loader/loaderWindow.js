@@ -16,7 +16,7 @@ function createLoaderWindow() {
         //  preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: !isDev
+            devTools: !isDev.default
         }
     });
     loaderWindow.on('closed', () => {

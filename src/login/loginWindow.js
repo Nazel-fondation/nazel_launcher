@@ -3,7 +3,7 @@ const { BrowserWindow } = require('electron');
 let loginWindow;
 
 async function createLoginWindow() {
-    const { isDev } = import("electron-is-dev")
+    const { isDev } = await import("electron-is-dev")
     loginWindow = new BrowserWindow({
         width: 450,
         height: 520,
@@ -15,7 +15,7 @@ async function createLoginWindow() {
         //  preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: !isDev
+            devTools: !isDev.default
         }
     });
     loginWindow.on('closed', () => {

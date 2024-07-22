@@ -4,14 +4,14 @@ const path = require('path');
 let homeWindow;
 
 async function createHomeWindow () {
-    const { isDev } = import('electron-is-dev');
+    const isDev = await import('electron-is-dev');
     homeWindow = new BrowserWindow({
         autoHideMenuBar: true,
         width: 1300,
         height: 1000,
         webPreferences: {
             // preload: path.join(__dirname, 'preload.js'),
-            devTools: !isDev,
+            devTools: !isDev.default,
             nodeIntegration: true,
             contextIsolation: false
         }

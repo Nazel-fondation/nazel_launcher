@@ -41,7 +41,6 @@
       "artifactName": "Nazel.${ext}"
     },
     "nsis": {
-      "icon": "build/icons/icon.ico",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     },
