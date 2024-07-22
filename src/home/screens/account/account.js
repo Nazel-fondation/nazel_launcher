@@ -64,7 +64,7 @@ function enableAccountListeners(){
             ipcRenderer.invoke("updateAccount", pseudoInput.value, skinInput.value).then((result) => {
                 console.log(result)
                 if (result === "auth/pseudoUsed"){
-                    pseudoInput.classList.add("border border-red-500")
+                    pseudoInput.classList.add("border", "border-red-500")
                 }else{
                     ipcRenderer.invoke('getPlayerHead').then((result) => {
                         document.getElementById("playerHeadImage").src = `data:image/png;base64,${result}`; 

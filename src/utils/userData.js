@@ -34,7 +34,7 @@ async function updateUserData(valuePseudo, valueSkin){
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("pseudo", "==", valuePseudo));
     const querySnapshot = await getDocs(q);
-    if(!querySnapshot.empty)
+    if(!querySnapshot.empty && getUserData !== valuePseudo)
         return "auth/pseudoUsed"
 
     user_uid = store.get("user_uid");
