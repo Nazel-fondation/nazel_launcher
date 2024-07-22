@@ -4,7 +4,7 @@ let signInWindow;
 
 async function createSignInWindow() {
     const isDev = await import('electron-is-dev');
-    
+
     signInWindow = new BrowserWindow({
         width: 450,
         height: 750,
@@ -13,10 +13,9 @@ async function createSignInWindow() {
         transparent: true,
         resizable: false,
         webPreferences: {
-        //  preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: !isDev.default
+            devTools: isDev.default
         }
     });
     signInWindow.on('closed', () => {

@@ -23,13 +23,11 @@
     ],
     "linux": {
       "target": "deb",
-      "icon": "build/icons/icon.png",
       "artifactName": "Nazel.${ext}",
       "maintainer": "thibault0712 thibaultfalezan@gmail.com",
       "category": "Utility" 
     },
     "win": {
-      "icon": "build/icons/icon.ico",
       "target": [
         {
           "target": "nsis",
@@ -45,7 +43,6 @@
       "allowToChangeInstallationDirectory": true
     },
     "mac": {
-      "icon": "build/icons/icon.icns",
       "artifactName": "Nazel.${ext}",
       "target": "dmg",
       "category": "public.app-category.productivity"

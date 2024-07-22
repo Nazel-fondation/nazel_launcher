@@ -10,8 +10,7 @@ async function createHomeWindow () {
         width: 1300,
         height: 1000,
         webPreferences: {
-            // preload: path.join(__dirname, 'preload.js'),
-            devTools: !isDev.default,
+            devTools: isDev.default,
             nodeIntegration: true,
             contextIsolation: false
         }
