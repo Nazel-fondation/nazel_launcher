@@ -196,6 +196,8 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
     const userData_ = await userData.getUserData();
     const launcher = new Client();
     let opts = {
+        detached: true,
+        stdio: 'ignore',
         authorization: Authenticator.getAuth(userData_.pseudo),
         root: await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt",
         quickPlay: {
@@ -215,11 +217,16 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
         opts.forge = await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt/forge/forge.jar";
     }
 
-    launcher.launch(opts);  
+    const processOptions = {
+        stdio: 'ignore'
+    };
+
+    launcher.launch(opts, processOptions);
     launcher.on('progress', (e) => {
         event.sender.send('launcherProgress', e);
     });
     launcher.on('data', async (e) => {
+        console.log(e)
         //Know if minecraft is launched or not
         const Store = await import('electron-store');
         const store = new Store.default();
