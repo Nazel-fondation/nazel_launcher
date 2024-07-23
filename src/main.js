@@ -37,7 +37,7 @@ app.on('activate', () => {
 
 ipcMain.handle("systemRequirement", async () => {
     if (!await canRun.canRun()){ 
-        return "ok"
+        return "problem"
     }else{
         return "ok"
     }
