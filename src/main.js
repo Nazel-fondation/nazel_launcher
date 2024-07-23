@@ -220,7 +220,6 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
         event.sender.send('launcherProgress', e);
     });
     launcher.on('data', async (e) => {
-        console.log(e)
         //Know if minecraft is launched or not
         const Store = await import('electron-store');
         const store = new Store.default();
