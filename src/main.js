@@ -216,11 +216,14 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
     }
 
     launcher.launch(opts);
+    log.info("Suite")
     launcher.on('progress', (e) => {
+        log.info("Execute")
         event.sender.send('launcherProgress', e);
     });
+
     launcher.on('data', async (e) => {
-        console.log(e)
+        log.info(e)
         //Know if minecraft is launched or not
         const Store = await import('electron-store');
         const store = new Store.default();
