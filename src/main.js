@@ -216,9 +216,7 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
     }
 
     launcher.launch(opts);
-    log.info("Suite")
     launcher.on('progress', (e) => {
-        log.info("Execute")
         event.sender.send('launcherProgress', e);
     });
 
@@ -233,6 +231,8 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
             event.sender.send('minecraftData', e)
         }
     });
+
+    launcher.on('debug', (e) => {log.info(e)})
     launcher.on('close', (e) => {
         event.sender.send('minecraftClose', e)
     });
