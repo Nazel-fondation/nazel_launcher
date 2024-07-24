@@ -196,7 +196,9 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
     const userData_ = await userData.getUserData();
     const launcher = new Client();
     let opts = {
-        detached: false,
+        overrides: {
+            detached: false,
+        },
         authorization: Authenticator.getAuth(userData_.pseudo),
         root: await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt",
         quickPlay: {
