@@ -214,7 +214,6 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
             min: "1G"
         }
     }
-    opts.overrides.detached = false;
     if (serverData.type === "forge") {
         opts.forge = await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt/forge/forge.jar";
     }
