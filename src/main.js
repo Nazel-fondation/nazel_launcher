@@ -153,10 +153,6 @@ ipcMain.handle('registerRequest', async (event, pseudo, email, password) => {
     }
 })
 
-ipcMain.on('open-url', (event, url) => {
-    shell.openExternal(url);
-});
-
 ipcMain.on('launchMinecraft', async (event, serverData) => {
     const Store = await import('electron-store');
     const extract = require('extract-zip')
@@ -315,8 +311,8 @@ ipcMain.on("logOut", async () => {
     closeHomeWindow();
 })
 
-ipcMain.handle("updateAccount", async (event, valuePseudo, valueSkin) => {
-    return userData.updateUserData(valuePseudo, valueSkin);
+ipcMain.handle("updateAccount", async (event, valuePseudo) => {
+    return userData.updateUserData(valuePseudo);
 })
 
 ipcMain.handle("getPlayerHead", async () => {

@@ -23,7 +23,7 @@ async function getUserData(){
     }
 }
 
-async function updateUserData(valuePseudo, valueSkin){
+async function updateUserData(valuePseudo){
     const Store = await import('electron-store');
     const store = new Store.default();
     
@@ -40,8 +40,7 @@ async function updateUserData(valuePseudo, valueSkin){
     user_uid = store.get("user_uid");
     const userRef = doc(db, "users", user_uid);
     userData.pseudo = valuePseudo;
-    userData.skin = valueSkin;
-    setDoc(userRef, { pseudo: valuePseudo, skin: valueSkin});
+    setDoc(userRef, { pseudo: valuePseudo });
     return "ok"
 }
 

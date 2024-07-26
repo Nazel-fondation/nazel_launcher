@@ -19,12 +19,10 @@ const accountScreen = `
             <div class="flex flex-col justify-center">
                 <p class="text-white text-base font-medium leading-normal line-clamp-1">Skin</p>
                 <p class="text-[#9dabb8] text-sm font-normal leading-normal line-clamp-2">
-                Entrer l'url uniquement en png du skin que vous souhaiter avoir (il est possible que le skin ne soit pas visible sur tous les serveurs)
+                Un site internet spécial pour configurer votre skin (il est possible que le skin ne soit pas visible sur tous les serveurs)
             </div>                            
-            <div>
-                <div class="invisible h-6"></div>    
-                <input id="skinInput" type="text" class="shadow border-rose-500 appearance-none py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline rounded-md bg-squareBackground w-56 h-7"></input>
-                <p id="errorSkin" class="text-red-500 text-sm mt-1 font-medium invisible"></p>    
+            <div >
+                <button id="openSkinConfigurator" class="flex cursor-pointer items-center justify-center rounded-xl h-8 px-4 bg-squareBackground hover:bg-white hover:text-squareBackground text-white text-sm font-medium leading-normal w-fit">Configurer le skin</button> 
             </div>
         </div>
         <div class="flex items-center gap-4 px-4 min-h-14 justify-between py-2">
@@ -47,31 +45,18 @@ function getAccountValues() {
     ipcRenderer.invoke('getUserData').then((result) => {
         userData = result;
         document.getElementById("pseudoInput").value = result.pseudo;
-        if (result.skin !== "undefined")
-            document.getElementById("skinInput").value = result.skin;
     })
 }
 
 function enableAccountListeners(){
     const pseudoInput = document.getElementById("pseudoInput")
-    const skinInput = document.getElementById("skinInput")
+    const skinButton = document.getElementById("openSkinConfigurator")
     const logOutButton = document.getElementById("logOutButton")
     const errorPseudo = document.getElementById("errorPseudo")
 
-    skinInput.addEventListener("blur", () => {
-        pseudoInput.classList.remove("border", "border-red-500")
-        if (userData.skin !== skinInput.value){
-            ipcRenderer.invoke("updateAccount", pseudoInput.value, skinInput.value).then((result) => {
-                console.log(result)
-                if (result === "auth/pseudoUsed"){
-                    pseudoInput.classList.add("border", "border-red-500")
-                }else{
-                    ipcRenderer.invoke('getPlayerHead').then((result) => {
-                        document.getElementById("playerHeadImage").src = `data:image/png;base64,${result}`; 
-                    })
-                }
-            })
-        }
+    skinButton.addEventListener("click", () => {
+        console.log("un click")
+        shell.openExternal("http://82.65.207.221:81");
     })
 
     pseudoInput.addEventListener("blur", () => {
@@ -79,7 +64,7 @@ function enableAccountListeners(){
         pseudoInput.classList.remove("border", "border-red-500")
         errorPseudo.classList.add("invisible")
         if (userData.pseudo  !== pseudoInput.value){
-            ipcRenderer.invoke("updateAccount", pseudoInput.value, skinInput.value).then((result) => {
+            ipcRenderer.invoke("updateAccount", pseudoInput.value).then((result) => {
                 switch (result) {
                     case "auth/pseudoUsed":
                         pseudoInput.classList.add("border", "border-red-500");
@@ -94,7 +79,7 @@ function enableAccountListeners(){
                         break;
                 
                     default:
-                        ipcRenderer.send("updateAccount", pseudoInput.value, skinInput.value);
+                        ipcRenderer.send("updateAccount", pseudoInput.value);
                         ipcRenderer.invoke('getPlayerHead').then((result) => { //Try to change accountHead if skin url is good the head stay the same
                             document.getElementById("playerHeadImage").src = `data:image/png;base64,${result}`; 
                         })
