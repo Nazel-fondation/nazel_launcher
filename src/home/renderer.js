@@ -6,9 +6,9 @@ const { shell, ipcRenderer } = require('electron');
 var selectedServer = null;
 var serverData = null;
 
-async function updateServerData() {
+async function updatePlayerConnected(serverData) {
     try {
-        const response = await axios.get('https://api.mcstatus.io/v2/status/java/play.hypixel.net');
+        const response = await axios.get('https://api.mcstatus.io/v2/status/java/' + serverData.ip);
         const data = response.data;
         document.getElementById("players-number").textContent = data.players.online +  " joueurs en ligne";
         if(data.online){
@@ -37,6 +37,7 @@ async function getServerList(){
         if (selectedServer === null) { 
             selectedServer = doc.id 
             serverData = data;
+            updatePlayerConnected(data)
             li.classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-2", "border-4", "border-squareBackground", "cursor-pointer");
             document.getElementById("serverName").textContent = data.name;
             document.getElementById("serverBanner").style = "background-image: url('" + data.banner + "')"
@@ -50,6 +51,7 @@ async function getServerList(){
                 document.getElementById(selectedServer).classList.remove("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-2", "border-4", "border-squareBackground", "cursor-pointer")
                 document.getElementById(selectedServer).classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-squareBackground", "p-2", "cursor-pointer");
                 serverData = data;
+                updatePlayerConnected(data)
                 selectedServer = li.id;
                 li.classList.remove("h-14", "w-14", "rounded-md", "my-8", "bg-squareBackground", "p-2", "cursor-pointer");
                 li.classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-2", "border-4", "border-squareBackground", "cursor-pointer");
@@ -82,7 +84,15 @@ document.getElementById('play').addEventListener('click', async () => {
         .to('#loadingContener', { scale: 1.2, duration: 0.3 })
         .to('#loadingContener', { scale: 1, duration: 0.3 });
     ipcRenderer.on('launcherProgress', (event, progressData) => {
-        document.getElementById("loadingTitle").textContent = "Téléchargement de " + progressData.type;
+        switch (progressData.type) {
+            case "unzip":
+                document.getElementById("loadingTitle").textContent = "Mise en place de la configuration";                
+                break;
+        
+            default:
+                document.getElementById("loadingTitle").textContent = "Téléchargement de " + progressData.type;
+                break;
+        }
         const percentageValue = (progressData.task * 100 / progressData.total).toFixed(2) + "%"
         document.getElementById("loadingLabel").textContent = percentageValue;
         document.getElementById("loadingBar").style.width = percentageValue;
@@ -113,5 +123,3 @@ ipcRenderer.invoke('getPlayerHead').then((result) => {
 
 
 getServerList();
-updateServerData();
-setInterval(updateServerData, 5 * 60 * 1000)

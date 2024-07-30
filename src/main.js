@@ -1,7 +1,6 @@
 const { createSignInWindow, closeSignInWindow } = require('./sign_in/signInWindow');
 const { app, BrowserWindow, ipcMain, dialog, ipcRenderer } = require('electron');
 const path = require('path');
-const { Client, Authenticator } = require('minecraft-launcher-core');
 const { createLoaderWindow, closeLoaderWindow } = require('./loader/loaderWindow');
 const { createLoginWindow, closeLoginWindow } = require('./login/loginWindow');
 const { signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
@@ -16,6 +15,7 @@ const memory = require("./utils/memory.js")
 const userData = require("./utils/userData.js")
 const head = require("./utils/playerHead.js")
 const canRun = require("./utils/canRun.js");
+const startMinecraft = require('./utils/startMinecraft.js');
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -155,8 +155,10 @@ ipcMain.handle('registerRequest', async (event, pseudo, email, password) => {
 
 ipcMain.on('launchMinecraft', async (event, serverData) => {
     const Store = await import('electron-store');
-    const extract = require('extract-zip')
+    var DecompressZip = require('decompress-zip');
     const store = new Store.default();
+    const _workingDirectory = await workingDirectory.getWorkingDirectory()
+
 
     if (!store.has("VERSION_" + serverData.id) || store.get("VERSION_" + serverData.id) !== serverData.clientVersion){
         workingDirectory.cleanWorkingDirectoryForServerUpdate(serverData.id)
@@ -165,7 +167,7 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
         try {
             await download(win, serverData.serverContent, 
                 {
-                directory: await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt",
+                directory: _workingDirectory + "/" + serverData.id + "/defaullt",
                 onTotalProgress: (e) => {            
                         const convertedData = {
                             type: "serverContent",
@@ -175,66 +177,27 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
                         event.sender.send('launcherProgress', convertedData);
                     }
             });
-            await extract(await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt/serverContent.zip", { dir: await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt" })
-            fs.unlink(await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt/serverContent.zip", (err) => {
-                if (err) {
-                  console.error('Failed to delete the file:', err);
-                } else {
-                  console.log('File deleted successfully');
+            var unzipper = new DecompressZip(_workingDirectory + "/" + serverData.id + "/defaullt/serverContent.zip")
+            unzipper.on('progress', function (fileIndex, fileCount) {
+                const convertedData = {
+                    type: "unzip",
+                    task: fileIndex,
+                    total: fileCount
                 }
-              });
-            store.set("VERSION_" + serverData.id, serverData.clientVersion)
+                event.sender.send('launcherProgress', convertedData);
+            });
+            unzipper.on('extract', () => {
+                startMinecraft.startMinecraft(event, userData, serverData, _workingDirectory, memory);
+                fs.unlink(_workingDirectory + "/" + serverData.id + "/defaullt/serverContent.zip", (err) => {if (err) console.error('Failed to delete the file:', err)});
+                store.set("VERSION_" + serverData.id, serverData.clientVersion)
+            });
+            unzipper.extract({path: _workingDirectory + "/" + serverData.id + "/defaullt"});
         } catch (error) {
-            console.log(error)
+            log.info(error)
         }
+    }else{
+        startMinecraft.startMinecraft(event, userData, serverData, _workingDirectory, memory);
     }
-
-    const userData_ = await userData.getUserData();
-    const launcher = new Client();
-    let opts = {
-        overrides: {
-            detached: false,
-        },
-        authorization: Authenticator.getAuth(userData_.pseudo),
-        root: await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt",
-        quickPlay: {
-            type: "multiplayer",
-            identifier: serverData.ip
-        },
-        version: {
-            number: serverData.version,
-            type: "release"
-        },
-        memory: {
-            max: await memory.convertedAllocatedMemoryForMinecraft(), //We can't use getAllocatedMemory because we had to precise the unit of memory (Gigabyt, Byte, Bite, ...)
-            min: "1G"
-        }
-    }
-    if (serverData.type === "forge") {
-        opts.forge = await workingDirectory.getWorkingDirectory() + "/" + serverData.id + "/defaullt/forge/forge.jar";
-    }
-
-    launcher.launch(opts);
-    launcher.on('progress', (e) => {
-        event.sender.send('launcherProgress', e);
-    });
-
-    launcher.on('data', async (e) => {
-        log.info(e)
-        //Know if minecraft is launched or not
-        const Store = await import('electron-store');
-        const store = new Store.default();
-        if (store.has("closeAfterStarted") && store.get("closeAfterStarted") === true){
-            app.quit()
-        }else{
-            event.sender.send('minecraftData', e)
-        }
-    });
-
-    launcher.on('debug', (e) => {log.info(e)})
-    launcher.on('close', (e) => {
-        event.sender.send('minecraftClose', e)
-    });
 });
 
 ipcMain.on("updateSettigns", async (event, settingName, settingValue) => {

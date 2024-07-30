@@ -7,7 +7,7 @@ async function createLoginWindow() {
 
     loginWindow = new BrowserWindow({
         width: 450,
-        height: 520,
+        height: 580,
         autoHideMenuBar: true,
         frame: false,
         transparent: true,
