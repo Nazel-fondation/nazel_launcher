@@ -5,6 +5,7 @@ let buttons = document.getElementsByTagName('button');
 for (let button of buttons) {
     button.addEventListener("click", (function(currentButton) {
         return function() {
+            console.log(isOpen)
             const buttonId = currentButton.id
             switch (buttonId) {
                 case "settingsButton":
@@ -58,9 +59,15 @@ function closeScreenIfOpen(screenName, animation){
 }
 
 function openScreen(screenName){
-    isOpen = screenName;
-    document.getElementById('play').style.transform = ''; //Patch play button bug who stay visible when settingsButton due to gsap
-    document.getElementById('loadingContener').style.transform = ''; //Patch loadingContener bug who stay visible when settingsButton due to gsap
+    isOpen = screenName; 
+
+    if (document.getElementById('play'))
+        document.getElementById('play').style.transform = ''; //Patch play button bug who stay visible when settingsButton due to gsap
+    else if(document.getElementById('loadingContener'))
+        document.getElementById('loadingContener').style.transform = ''; //Patch loadingContener bug who stay visible when settingsButton due to gsap
+    else if(document.getElementById('disabledPlay'))
+        document.getElementById('disabledPlay').style.transform = ''; //Patch disabledPlay bug who stay visible when settingsButton due to gsap
+
     switch (screenName) {
         case "settingsScreen":
             document.getElementById('overContent').innerHTML = settingsScreen;
