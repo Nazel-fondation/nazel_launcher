@@ -5,7 +5,6 @@ let buttons = document.getElementsByTagName('button');
 for (let button of buttons) {
     button.addEventListener("click", (function(currentButton) {
         return function() {
-            console.log(isOpen)
             const buttonId = currentButton.id
             switch (buttonId) {
                 case "settingsButton":
@@ -50,8 +49,8 @@ function closeScreenIfOpen(screenName, animation){
     if (isOpen === screenName){
         isOpen = null
         if (animation){
-            gsap.fromTo("#" + screenName, { opacity: 1 }, { duration: 0.5, opacity: 0 });
-            setTimeout(() => {document.getElementById(screenName).remove()}, 500);
+            const screenElement = document.getElementById(screenName)
+            gsap.fromTo("#" + screenName, { opacity: 1 }, { duration: 0.5, opacity: 0, onComplete: () => {screenElement.remove()} });
         }else{
             document.getElementById(screenName).remove()
         }

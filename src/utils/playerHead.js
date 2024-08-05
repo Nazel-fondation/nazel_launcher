@@ -1,12 +1,17 @@
 //If player hasn't got a skin url we will verify if a skin exist for the username in real Minecraft
 const Jimp = require('jimp');
+const axios = require('axios');
 
 
-function getPlayerHead(skinUrl, pseudo) {
-    if (skinUrl !== null)
-        return getHeadFromSkinUrl(skinUrl, pseudo); //If skinurl has problem we use the pseudo of the player to try to get an other head
-    else
-        return getHeadFromPseudo(pseudo);    
+async function getPlayerHead(pseudo) {
+
+  try {
+    const response = await axios.get('http://82.65.207.221:81/' + pseudo + '.json');
+    const data = response.data;
+    return getHeadFromSkinUrl(data.skins.default);
+  } catch (error) {
+    return getHeadFromPseudo(pseudo);
+  }
 }
 
 async function getHeadFromPseudo(pseudo) {
@@ -21,8 +26,9 @@ async function getHeadFromPseudo(pseudo) {
     return buffer;
 }
 
-async function getHeadFromSkinUrl(skinUrl, pseudo) {
+async function getHeadFromSkinUrl(userID) {
   try {
+    const skinUrl = "http://82.65.207.221:81/textures/" + userID
     const fetch = (await import('node-fetch')).default;
 
     // Download image skin

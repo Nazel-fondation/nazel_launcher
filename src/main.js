@@ -280,6 +280,6 @@ ipcMain.handle("updateAccount", async (event, valuePseudo) => {
 
 ipcMain.handle("getPlayerHead", async () => {
     const data = await userData.getUserData();
-    const result = await head.getPlayerHead(data.skin, data.pseudo);
+    const result = await head.getPlayerHead(data.pseudo);
     return result.toString("base64");
 })
