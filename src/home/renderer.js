@@ -38,23 +38,23 @@ async function getServerList(){
             selectedServer = doc.id 
             serverData = data;
             updatePlayerConnected(data)
-            li.classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-2", "border-4", "border-squareBackground", "cursor-pointer");
+            li.classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-1", "border-4", "border-squareBackground", "cursor-pointer");
             document.getElementById("serverName").textContent = data.name;
             document.getElementById("serverBanner").style = "background-image: url('" + data.banner + "')"
             document.getElementById("serverVersion").textContent = "Version du serveur : " + data.clientVersion;
         }else{
-            li.classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-squareBackground", "p-2", "cursor-pointer");
+            li.classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-squareBackground", "p-1", "cursor-pointer");
         }
         li.addEventListener('click', () => {
             if (selectedServer !== li.id){
                 gsap.fromTo("#serverBanner", { opacity: 0 }, { duration: 1, opacity: 1 });
-                document.getElementById(selectedServer).classList.remove("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-2", "border-4", "border-squareBackground", "cursor-pointer")
-                document.getElementById(selectedServer).classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-squareBackground", "p-2", "cursor-pointer");
+                document.getElementById(selectedServer).classList.remove("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-1", "border-4", "border-squareBackground", "cursor-pointer")
+                document.getElementById(selectedServer).classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-squareBackground", "p-1", "cursor-pointer");
                 serverData = data;
                 updatePlayerConnected(data)
                 selectedServer = li.id;
-                li.classList.remove("h-14", "w-14", "rounded-md", "my-8", "bg-squareBackground", "p-2", "cursor-pointer");
-                li.classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-2", "border-4", "border-squareBackground", "cursor-pointer");
+                li.classList.remove("h-14", "w-14", "rounded-md", "my-8", "bg-squareBackground", "p-1", "cursor-pointer");
+                li.classList.add("h-14", "w-14", "rounded-md", "my-8", "bg-selectedSquareBackground", "p-1", "border-4", "border-squareBackground", "cursor-pointer");
                 document.getElementById("serverName").textContent = data.name;
                 document.getElementById("serverBanner").style = "background-image: url('" + data.banner + "')"
                 document.getElementById("serverVersion").textContent = "Version du client : " + data.clientVersion;
