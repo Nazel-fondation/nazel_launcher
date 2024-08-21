@@ -10,6 +10,10 @@
 - Connexion rapide à vos serveurs. ⚡
 - Possibilité de créer un serveur de mini-jeux privé. 🕹️ ( En cour de dev )
 
+## Téléchargement du Launcher 💾
+
+Vous pouvez télécharger la dernière version de Nazel Launcher directement depuis notre [site officiel](https://nazel-launcher.web.app) ou en allant dans la section [Releases](https://github.com/Nazel-fondation/nazel_launcher/releases) de ce dépôt. 🛠️
+
 ## Installation 🛠️
 
 Ce projet utilise [Electron](https://www.electronjs.org/), un framework pour créer des applications de bureau à partir de JavaScript.
