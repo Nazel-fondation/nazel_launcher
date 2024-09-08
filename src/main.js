@@ -184,14 +184,15 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
                     task: fileIndex,
                     total: fileCount
                 }
+                log.info(convertedData);
                 event.sender.send('launcherProgress', convertedData);
             });
             unzipper.on('extract', () => {
                 startMinecraft.startMinecraft(event, userData, serverData, _workingDirectory, memory);
-                fs.unlink(_workingDirectory + "/" + serverData.id + "/defaullt/serverContent.zip", (err) => {if (err) console.error('Failed to delete the file:', err)});
+                fs.unlink(_workingDirectory + "/" + serverData.id + "/defaullt/serverContent.zip", (err) => {if (err) log.error('Failed to delete the file:', err)});
                 store.set("VERSION_" + serverData.id, serverData.clientVersion)
             });
-            unzipper.extract({path: _workingDirectory + "/" + serverData.id + "/defaullt"});
+            unzipper.extract({path: _workingDirectory + "\\" + serverData.id + "\\defaullt"});
         } catch (error) {
             log.info(error)
         }
