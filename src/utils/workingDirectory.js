@@ -9,14 +9,14 @@ function getDefaultWorkingDirectory(){
             return process.env.APPDATA + "\\.nazel"
 
         case "linux": //LINUX
-            return process.env.HOME + "\\.nazel"
+            return process.env.HOME + "/.nazel"
         
         case "darwin": //MAC
             return process.env.HOME + "\\.nazel"
     
         default:
             console.error("ERROR : Impossible to find operating system")
-            return process.env.HOME + "\\.nazel"
+            return process.env.HOME + "/.nazel"
     }
 }
 
