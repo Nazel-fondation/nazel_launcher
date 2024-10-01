@@ -192,7 +192,22 @@ ipcMain.on('launchMinecraft', async (event, serverData) => {
                 fs.unlink(_workingDirectory + "/" + serverData.id + "/defaullt/serverContent.zip", (err) => {if (err) log.error('Failed to delete the file:', err)});
                 store.set("VERSION_" + serverData.id, serverData.clientVersion)
             });
-            unzipper.extract({path: _workingDirectory + "\\" + serverData.id + "\\defaullt"});
+
+            const os = process.platform
+            switch (os) {
+                case "win32": //WINDOWS
+                    unzipper.extract({path: _workingDirectory + "\\" + serverData.id + "\\defaullt"});
+        
+                case "linux": //LINUX
+                    unzipper.extract({path: _workingDirectory + "/" + serverData.id + "/defaullt"});
+                
+                case "darwin": //MAC
+                    unzipper.extract({path: _workingDirectory + "/" + serverData.id + "/defaullt"});
+            
+                default:
+                    log.info("ERROR : Impossible to find operating system")
+                    unzipper.extract({path: _workingDirectory + "/" + serverData.id + "/defaullt"});
+            }
         } catch (error) {
             log.info(error)
         }
